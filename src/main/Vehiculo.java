@@ -1,4 +1,4 @@
-
+package main;
 public abstract class Vehiculo implements Matriculable {
 	
 	//Atributos
