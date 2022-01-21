@@ -1,4 +1,6 @@
+package main;
 import javax.swing.JOptionPane;
+
 import java.util.ArrayList;
 public class mainApp {
 
