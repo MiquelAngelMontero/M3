@@ -7,7 +7,7 @@ public class Titular extends Persona {
 	private boolean seguro;
 	
 	
-	//Constructor
+	//Constructor heredado de la clase Persona pero con sus dos atributos extras añadidos
 	public Titular(String nombre, String apellido, String fechaNac, Carnet carnet, boolean garajePropio, boolean seguro) {
 		super(nombre, apellido, fechaNac, carnet);
 		// TODO Auto-generated constructor stub

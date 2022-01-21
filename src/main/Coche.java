@@ -8,12 +8,5 @@ public class Coche extends Vehiculo {
 		// TODO Auto-generated constructor stub
 	}
 
-	@Override
-	public String toString() {
-		return "Coche [matricula=" + matricula + ", marca=" + marca + ", trasera=" + trasera + ", delantera="
-				+ delantera + ", color=" + color + "]";
-	}
-	
-	
 	
 }
