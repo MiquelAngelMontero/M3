@@ -15,9 +15,9 @@ public class Rueda {
 	}
 	
 	//Metodos
-	//Comprovar diametro de la rueda
+	//Comprovar diametro de la rueda (se ejecuta en el constructor)
 	public double comprobarDiametro(double d) {
-		
+		//Hacemos un if que defina el diametro de cada rueda entre 0.4 y 4 (si no por defecto devolverá 1)
 		if(diametro >= 0.4 || diametro <= 4) {
 			return diametro;
 		}else {
@@ -26,9 +26,10 @@ public class Rueda {
 		
 	}
 	
-	//Comprovar rueda delantera o trasera
+	//Comprovar rueda delantera o trasera (se ejecuta en el constructor)
 	public String comprovarRueda(char chardt) {
 		
+		//Transforma el caracter a String para evitar errores al esctibir la posición
 		chardt = Character.toLowerCase(chardt);
 		
 		if(chardt == 'd') {
