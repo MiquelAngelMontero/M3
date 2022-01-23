@@ -4,7 +4,6 @@ import javax.swing.JOptionPane;
 import java.util.ArrayList;
 public class mainApp {
 	
-	static char carnetNec = 0;
 	
 	public static void main(String[] args) {
 
@@ -12,32 +11,75 @@ public class mainApp {
 		ArrayList<Coche> arrayCoches = new ArrayList<>();
 		ArrayList<Moto> arrayMotos = new ArrayList<>();
 		ArrayList<Camion> arrayCamiones = new ArrayList<>();
+		ArrayList<Titular> arrayTitulares = new ArrayList<>();
+		ArrayList<Conductor> arrayConductores = new ArrayList<>();
 		
-		//Creamos un titular con el metodo crear titular
-		Titular t1 = crearTitular();
-		menu(arrayCoches, arrayMotos, arrayCamiones, t1);//Ejecutamos el menú y como parametros le pasamos los arrays y el titular creado anteriormente
-		
-		String respuesta = JOptionPane.showInputDialog("El tiutlar serà el conductor del vehiculo? (S/N)");//Al acabar la ejecucion del menú y haber creado el vehiculo
-		respuesta = respuesta.toUpperCase();															   //preguntamos al usuario si va a ser el conductor del vehiculo
-																										   //para crear un conductor o no.
-		//Deoendiendo de la respuesta se crea el conductor o no
-		if (respuesta.equals("N")) {
-			Conductor c1 = crearConductor();
-			//Si el conductor es creado tambien se comprueba si tiene licencia suficiente para usar el vehiculo
-			if (c1.getCarnet().getTipoLicencia() < carnetNec) {
-				JOptionPane.showMessageDialog(null, "El conductor no tiene el permiso suficiente para conducir el vehiculo");
-			}
-		}
-		
+		menuPrincipal(arrayCoches, arrayMotos, arrayCamiones, arrayTitulares, arrayConductores);//Ejecutamos el menú y como parametros le pasamos los arrays
+		mostrarArrays(arrayCoches, arrayMotos, arrayCamiones, arrayTitulares, arrayConductores);
 		
 	}
 	
-	//Metodo menú
-	public static void menu(ArrayList<Coche> aCoch, ArrayList<Moto> am, ArrayList<Camion> aCam, Titular t) {
+	//Metodos de menú	
+	public static void menuPrincipal(ArrayList<Coche> aCoch, ArrayList<Moto> am, ArrayList<Camion> aCam, ArrayList<Titular> aTit, ArrayList<Conductor> aCond) {
 		
 		int opcion = 0;
 		
-		//El metodo menú consiste en un switch dentro de un while, el while acabara quando se seleccione una opción
+		do {
+			
+			String opcionS = JOptionPane.showInputDialog("Selecciona una opción:\n1.Crear una persona\n2.Crear un vehiculo\n3.salir");
+			opcion = Integer.parseInt(opcionS); 
+			
+			switch (opcion) {
+				
+				case 1:
+					menuPersonas(aTit, aCond);
+					break;
+				case 2:
+					menuVehiculos(aCoch, am, aCam, aTit, aCond);
+					break;
+				case 3:
+					break;
+				default:
+					JOptionPane.showMessageDialog(null, "La opcion introducida no es correcta");
+					break;
+			}
+			
+		}while (opcion != 3);
+		
+	}
+	
+	public static void menuPersonas(ArrayList<Titular> aTit, ArrayList<Conductor> aCond) {
+		
+		int opcion = 0;
+		
+		do {
+			
+			String opcionS = JOptionPane.showInputDialog("Selecciona una opción:\n1.Crear un titular\n2.Crear un conductor\n3.salir");
+			opcion = Integer.parseInt(opcionS);
+			
+			switch (opcion) {
+				
+				case 1:
+					crearTitular(aTit);
+					break;
+				case 2:
+					crearConductor(aCond);
+					break;
+				case 3:
+					break;
+				default:
+					JOptionPane.showMessageDialog(null, "La opcion introducida no es correcta");
+					break;
+			}
+			
+		}while (opcion != 3);
+		
+	}
+	
+	public static void menuVehiculos(ArrayList<Coche> aCoch, ArrayList<Moto> am, ArrayList<Camion> aCam, ArrayList<Titular> aTit, ArrayList<Conductor> aCond) {
+		
+		int opcion = 0;
+		
 		do {
 			
 			String opcionS = JOptionPane.showInputDialog("Escoja una opción:\n1.Crear coche\n2.Crear moto\n3.Crear camion\n4.Salir");
@@ -46,38 +88,14 @@ public class mainApp {
 			switch (opcion) {
 		
 			case 1:
-				carnetNec = 'B';							//Cada caso del switch assigna el carnet mínimo necesario para llevar el vehiculo de esa opción.
-				if(validarPermiso(t.getCarnet())) {			//Seguidamente llama al metodo validar permiso el qual comprueva si el conductor puede llevar el vehiculo.
-					crearCoche(aCoch);						//Si es así se crea el vehiculo y se sale del bucle, si no es así se sale del bucle directamente.
-					opcion = 4;
+					crearCoche(aCoch, aTit, aCond);
 					break;
-				}else {
-					JOptionPane.showMessageDialog(null, "El carnet del titular no es suficiente");
-					opcion = 4;
-					break;
-				}
 			case 2:
-				carnetNec = 'A';
-				if(validarPermiso(t.getCarnet())) {;
-					crearMoto(am);
-					opcion = 4;
+					crearMoto(am, aTit, aCond);
 					break;
-				}else {
-					JOptionPane.showMessageDialog(null, "El carnet del titular no es suficiente");
-					opcion = 4;
-					break;
-				}
 			case 3:
-				carnetNec = 'C';
-				if(validarPermiso(t.getCarnet())) {
-					crearCamion(aCam);
-					opcion = 4;
+					crearCamion(aCam, aTit, aCond);
 					break;
-				}else {
-					JOptionPane.showMessageDialog(null, "El carnet del titular no es suficiente");
-					opcion = 4;
-					break;
-				}
 			case 4:
 				break;
 			default:
@@ -89,11 +107,15 @@ public class mainApp {
 	}
 	
 	//Metodo para crear coche
-	public static void crearCoche(ArrayList<Coche> aCoche) {
+	public static void crearCoche(ArrayList<Coche> aCoche, ArrayList<Titular> aTit, ArrayList<Conductor> aCond) {
 		
 		//Este metodo pide la información necessaria de un coche, después crea un objeto coche y lo assigna 
 		//a la array pasada por parametro (se usa el metodo crearRueda() para crear las ruadas del vehiculo)
 		
+		int correcto = 0;
+		Titular t = null;
+		ArrayList<Persona> alp = new ArrayList<>();
+		
 		String matricula = JOptionPane.showInputDialog("Inserta la matricula del vehiculo");
 		String marca = JOptionPane.showInputDialog("Inserta la marca del vehiculo");
 		String color = JOptionPane.showInputDialog("Inserta el color del vehiculo");
@@ -104,16 +126,81 @@ public class mainApp {
 		JOptionPane.showMessageDialog(null, "Inserta los valores de las ruedas traseras");
 		Rueda rt = crearRueda('t');
 		
-		Coche c = new Coche(matricula, marca, rt, rd, color);
-		aCoche.add(c);
+		do {
+			String titular = JOptionPane.showInputDialog("Inserta el nombre del titular del vehiculo");
+			
+			for (int i=0; i<aTit.size();i++) {
+				
+				if (titular.equals(aTit.get(i).getNombre())) {
+					t = aTit.get(i);
+					correcto = 1;
+				}
+				
+			}
+			
+			if (correcto == 0) {
+				JOptionPane.showMessageDialog(null, "El nombre del titular no es correcto");
+			}
 		
+		}while(correcto != 1);
+		
+		String res = JOptionPane.showInputDialog("Quiere añadir otro conductor al vehiculo?(S/N)");
+		res = res.toUpperCase();
+		
+		if(res.equals("S")) {
+			
+			correcto = 0;
+			String numCondS = JOptionPane.showInputDialog("Quantos conductores vas a añadir?");
+			int numCond = Integer.parseInt(numCondS), cont = 0;
+			
+			do {
+				
+				do {
+					correcto = 0;
+					String cond = JOptionPane.showInputDialog("Inserta el nombre del conductor del vehiculo");
+										
+					for (int i=0; i<aCond.size();i++) {
+						
+						if ((cond.equals(aCond.get(i).getNombre())) && (validarPermiso(aCond.get(i).getCarnet(), 'B'))) {
+							alp.add(aCond.get(i));
+							correcto = 1;
+						}
+						
+					}
+					
+					if (correcto == 0) {
+						JOptionPane.showMessageDialog(null, "El nombre del titular no es correcto o su carnet no le permite conducir el vehiculo");
+					}
+					
+				}while (correcto != 1);
+				
+				cont++;
+				
+			}while(cont != numCond);
+			
+		}
+		
+		
+		Coche c = new Coche(matricula, marca, rt, rd, color, t);
+		
+		Persona[] aP = new Persona[alp.size()];
+		
+		aP = alp.toArray(aP);
+		
+		c.setPersona(aP);
+		
+		aCoche.add(c);			
 	}
 	
 	//Metodo para crear camion
-	public static void crearCamion(ArrayList<Camion> aCamion) {
+	public static void crearCamion(ArrayList<Camion> aCamion, ArrayList<Titular> aTit, ArrayList<Conductor> aCond) {
 		
-		//Este metodo pide la información necessaria de un camion, después crea un objeto camion y lo assigna 
+		//Este metodo pide la información necessaria de un coche, después crea un objeto coche y lo assigna 
 		//a la array pasada por parametro (se usa el metodo crearRueda() para crear las ruadas del vehiculo)
+		
+		int correcto = 0;
+		Titular t = null;
+		ArrayList<Persona> alp = new ArrayList<>();
 		
 		String matricula = JOptionPane.showInputDialog("Inserta la matricula del vehiculo");
 		String marca = JOptionPane.showInputDialog("Inserta la marca del vehiculo");
@@ -125,29 +212,157 @@ public class mainApp {
 		JOptionPane.showMessageDialog(null, "Inserta los valores de las ruedas traseras");
 		Rueda rt = crearRueda('t');
 		
-		Camion c = new Camion(matricula, marca, rt, rd, color);
-		aCamion.add(c);
+		do {
+			String titular = JOptionPane.showInputDialog("Inserta el nombre del titular del vehiculo");
+			
+			for (int i=0; i<aTit.size();i++) {
+				
+				if (titular.equals(aTit.get(i).getNombre())) {
+					t = aTit.get(i);
+					correcto = 1;
+				}
+				
+			}
+			
+			if (correcto == 0) {
+				JOptionPane.showMessageDialog(null, "El nombre del titular no es correcto");
+			}
+		
+		}while(correcto != 1);
+		
+		String res = JOptionPane.showInputDialog("Quiere añadir otro conductor al vehiculo?(S/N)");
+		res = res.toUpperCase();
+		
+		if(res.equals("S")) {
+			
+			correcto = 0;
+			String numCondS = JOptionPane.showInputDialog("Quantos conductores vas a añadir?");
+			int numCond = Integer.parseInt(numCondS), cont = 0;
+			
+			do {
+				
+				do {
+					correcto = 0;
+					String cond = JOptionPane.showInputDialog("Inserta el nombre del conductor del vehiculo");
+										
+					for (int i=0; i<aCond.size();i++) {
+						
+						if ((cond.equals(aCond.get(i).getNombre())) && (validarPermiso(aCond.get(i).getCarnet(), 'B'))) {
+							alp.add(aCond.get(i));
+							correcto = 1;
+						}
+						
+					}
+					
+					if (correcto == 0) {
+						JOptionPane.showMessageDialog(null, "El nombre del titular no es correcto");
+					}
+					
+				}while (correcto != 1);
+				
+				cont++;
+				
+			}while(cont != numCond);
+			
+		}
+		
+		
+		Camion c = new Camion(matricula, marca, rt, rd, color, t);
+		
+		Persona[] aP = new Persona[alp.size()];
+		
+		aP = alp.toArray(aP);
+		
+		c.setPersona(aP);
+		
+		aCamion.add(c);		
 		
 	}
 	
 	//Metodo para crear moto
-	public static void crearMoto(ArrayList<Moto> aMoto) {
+	public static void crearMoto(ArrayList<Moto> aMoto, ArrayList<Titular> aTit, ArrayList<Conductor> aCond) {
 		
-		//Este metodo pide la información necessaria de una moto, después crea un objeto moto y lo assigna 
+		//Este metodo pide la información necessaria de un coche, después crea un objeto coche y lo assigna 
 		//a la array pasada por parametro (se usa el metodo crearRueda() para crear las ruadas del vehiculo)
+		
+		int correcto = 0;
+		Titular t = null;
+		ArrayList<Persona> alp = new ArrayList<>();
 		
 		String matricula = JOptionPane.showInputDialog("Inserta la matricula del vehiculo");
 		String marca = JOptionPane.showInputDialog("Inserta la marca del vehiculo");
 		String color = JOptionPane.showInputDialog("Inserta el color del vehiculo");
 		
-		JOptionPane.showMessageDialog(null, "Inserta el valor de la rueda delantera");
+		JOptionPane.showMessageDialog(null, "Inserta los valores de las ruedas delanteras");
 		Rueda rd = crearRueda('d');
 		
-		JOptionPane.showMessageDialog(null, "Inserta el valor de la rueda trasera");
+		JOptionPane.showMessageDialog(null, "Inserta los valores de las ruedas traseras");
 		Rueda rt = crearRueda('t');
 		
-		Moto m = new Moto(matricula, marca, rt, rd, color);
-		aMoto.add(m);
+		do {
+			String titular = JOptionPane.showInputDialog("Inserta el nombre del titular del vehiculo");
+			
+			for (int i=0; i<aTit.size();i++) {
+				
+				if (titular.equals(aTit.get(i).getNombre())) {
+					t = aTit.get(i);
+					correcto = 1;
+				}
+				
+			}
+			
+			if (correcto == 0) {
+				JOptionPane.showMessageDialog(null, "El nombre del titular no es correcto");
+			}
+		
+		}while(correcto != 1);
+		
+		String res = JOptionPane.showInputDialog("Quiere añadir otro conductor al vehiculo?(S/N)");
+		res = res.toUpperCase();
+		
+		if(res.equals("S")) {
+			
+			correcto = 0;
+			String numCondS = JOptionPane.showInputDialog("Quantos conductores vas a añadir?");
+			int numCond = Integer.parseInt(numCondS), cont = 0;
+			
+			do {
+				
+				do {
+					correcto = 0;
+					String cond = JOptionPane.showInputDialog("Inserta el nombre del conductor del vehiculo");
+										
+					for (int i=0; i<aCond.size();i++) {
+						
+						if ((cond.equals(aCond.get(i).getNombre())) && (validarPermiso(aCond.get(i).getCarnet(), 'B'))) {
+							alp.add(aCond.get(i));
+							correcto = 1;
+						}
+						
+					}
+					
+					if (correcto == 0) {
+						JOptionPane.showMessageDialog(null, "El nombre del titular no es correcto");
+					}
+					
+				}while (correcto != 1);
+				
+				cont++;
+				
+			}while(cont != numCond);
+			
+		}
+		
+		
+		Moto c = new Moto(matricula, marca, rt, rd, color, t);
+		
+		Persona[] aP = new Persona[alp.size()];
+		
+		aP = alp.toArray(aP);
+		
+		c.setPersona(aP);
+		
+		aMoto.add(c);	
 		
 	}
 	
@@ -168,7 +383,7 @@ public class mainApp {
 	}
 	
 	//Metodo para crear un titular
-	public static Titular crearTitular() {
+	public static void crearTitular(ArrayList<Titular> aTit) {
 		
 		//Este metodo obtiene los datos necessarios para crear un carnet, un titular y assignarle el carnet creado a ese titular
 		
@@ -204,12 +419,12 @@ public class mainApp {
 		Carnet c = new Carnet(id, lic, nomCom, fechaCad);
 		Titular t = new Titular(nombre, apellido, fechaNac, c, garajePropio, seguro);
 		
-		return t;
+		aTit.add(t);
 		
 	}
 	
 	//Metodo que comprueba el tipo de carnet
-	public static boolean validarPermiso(Carnet c) {
+	public static boolean validarPermiso(Carnet c, char carnetNec) {
 		
 		if (c.getTipoLicencia() >= carnetNec) { //Este if compara el carnet pasado por parametro con la variable global que contiene el carnet necessario para conducir el vehiculo
 			return true;
@@ -220,7 +435,7 @@ public class mainApp {
 	}
 	
 	//Metodo para crear un titular
-	public static Conductor crearConductor() {
+	public static void crearConductor(ArrayList<Conductor> aCond) {
 		
 		//Metodo similar al de titular pero con los atributos necessarios para un conductor
 		String nombre = JOptionPane.showInputDialog("Inserta el nombre del conductor");
@@ -240,8 +455,52 @@ public class mainApp {
 		Carnet c = new Carnet(id, lic, nomCom, fechaCad);
 		Conductor cond = new Conductor(nombre, apellido, fechaNac, c);
 		
-		return cond;
+		aCond.add(cond);
 		
+	}
+	
+	public static void mostrarArrays(ArrayList<Coche> aCoch, ArrayList<Moto> am, ArrayList<Camion> aCam, ArrayList<Titular> aTit, ArrayList<Conductor> aCond) {
+		
+		System.out.println("Vehiculos:\n");
+		System.out.println("Coches:\n");
+		
+		for(int i=0; i<aCoch.size(); i++) {
+			
+			System.out.println(aCoch.get(i).toString()); 
+			
+		}
+				
+		System.out.println("Motos:\n");
+		
+		for(int i=0; i<am.size(); i++) {
+			
+			System.out.println(am.get(i).toString()); 
+			
+		}
+		
+		System.out.println("Camiones:\n");
+		
+		for(int i=0; i<aCam.size(); i++) {
+			
+			System.out.println(aCam.get(i).toString()); 
+			
+		}
+		
+		System.out.println("Titulares:\n");
+		
+		for(int i=0; i<aTit.size(); i++) {
+			
+			System.out.println(aTit.get(i).toString()); 
+			
+		}
+		
+		System.out.println("Conductores:\n");
+		
+		for(int i=0; i<aCond.size(); i++) {
+			
+			System.out.println(aCond.get(i).toString()); 
+			
+		}
 	}
 	
 }

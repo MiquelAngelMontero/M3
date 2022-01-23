@@ -42,5 +42,11 @@ public class Rueda {
 		}
 		
 	}
+
+	@Override
+	public String toString() {
+		return "Diametro: " + diametro + ", Marca:" + marca;
+	}
+
 	
 }

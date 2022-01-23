@@ -14,5 +14,11 @@ public class Titular extends Persona {
 		this.garajePropio = garajePropio;
 		this.seguro = seguro;
 	}
+
+	@Override
+	public String toString() {
+		return "Garaje Propio: " + garajePropio + ", Seguro: " + seguro + ", Nombre: " + nombre + ", Apellido: "
+				+ apellido + ", Fecha de nacimiento: " + fechaNac + ", Carnet: " + carnet.toString();
+	}
 	
 }

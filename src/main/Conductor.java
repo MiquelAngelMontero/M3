@@ -7,5 +7,11 @@ public class Conductor extends Persona {
 		super(nombre, apellido, fechaNac, carnet);
 		// TODO Auto-generated constructor stub
 	}
-
+	
+	@Override
+	public String toString() {
+		return "Nombre: " + nombre + ", Apellido: "
+				+ apellido + ", Fecha de nacimiento: " + fechaNac + ", Carnet: " + carnet.toString();
+	}
+	
 }

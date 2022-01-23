@@ -53,6 +53,12 @@ public class Carnet {
 	//Getter para poder acceder al tipo de licencia desde el metodo main
 	public char getTipoLicencia() {
 		return tipoLicencia;
-	}	
+	}
 
+	@Override
+	public String toString() {
+		return "ID: " + id + ", Licencia: " + tipoLicencia
+				+ ", Fecha de caducidad: " + fechaCad;
+	}	
+	
 }

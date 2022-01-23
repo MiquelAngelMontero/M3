@@ -40,6 +40,11 @@ public abstract class Persona {
 	public Carnet getCarnet() {
 		return carnet;
 	}
+
+	public String getNombre() {
+		return nombre;
+	}
 	 
+
 	
 }
