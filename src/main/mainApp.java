@@ -7,13 +7,14 @@ public class mainApp {
 	
 	public static void main(String[] args) {
 
-		//Creamos las arrays necessarias para cada tipo de vehiculo
+		//Creamos las arrays necessarias para cada tipo de vehiculo y de personas
 		ArrayList<Coche> arrayCoches = new ArrayList<>();
 		ArrayList<Moto> arrayMotos = new ArrayList<>();
 		ArrayList<Camion> arrayCamiones = new ArrayList<>();
 		ArrayList<Titular> arrayTitulares = new ArrayList<>();
 		ArrayList<Conductor> arrayConductores = new ArrayList<>();
 		
+		//Ejecutamos el menú y al finalizar su ejecución mostramos los objetos creados
 		menuPrincipal(arrayCoches, arrayMotos, arrayCamiones, arrayTitulares, arrayConductores);//Ejecutamos el menú y como parametros le pasamos los arrays
 		mostrarArrays(arrayCoches, arrayMotos, arrayCamiones, arrayTitulares, arrayConductores);
 		
@@ -24,6 +25,7 @@ public class mainApp {
 		
 		int opcion = 0;
 		
+		//En el menú principal podemos escojer entre personas o vehiculos, dependiendo de la opcion escojida se ejecutarà su respectivo menú
 		do {
 			
 			String opcionS = JOptionPane.showInputDialog("Selecciona una opción:\n1.Crear una persona\n2.Crear un vehiculo\n3.salir");
@@ -52,6 +54,7 @@ public class mainApp {
 		
 		int opcion = 0;
 		
+		//En el menú de personas podemos crear titulares y conductores
 		do {
 			
 			String opcionS = JOptionPane.showInputDialog("Selecciona una opción:\n1.Crear un titular\n2.Crear un conductor\n3.salir");
@@ -80,6 +83,7 @@ public class mainApp {
 		
 		int opcion = 0;
 		
+		//Menú para crear cada tipo de vehiculo
 		do {
 			
 			String opcionS = JOptionPane.showInputDialog("Escoja una opción:\n1.Crear coche\n2.Crear moto\n3.Crear camion\n4.Salir");
@@ -110,12 +114,14 @@ public class mainApp {
 	public static void crearCoche(ArrayList<Coche> aCoche, ArrayList<Titular> aTit, ArrayList<Conductor> aCond) {
 		
 		//Este metodo pide la información necessaria de un coche, después crea un objeto coche y lo assigna 
-		//a la array pasada por parametro (se usa el metodo crearRueda() para crear las ruadas del vehiculo)
+		//a la array pasada por parametro (se usa el metodo crearRueda() para crear las ruadas del vehiculo).
+		//Adremàs assignaremos un titular al vehiculo y tantos conductores como queramos (siempre que el conductor tenga el carnet necessario).
 		
 		int correcto = 0;
 		Titular t = null;
 		ArrayList<Persona> alp = new ArrayList<>();
 		
+		//Pedimos los datos del vehiculo
 		String matricula = JOptionPane.showInputDialog("Inserta la matricula del vehiculo");
 		String marca = JOptionPane.showInputDialog("Inserta la marca del vehiculo");
 		String color = JOptionPane.showInputDialog("Inserta el color del vehiculo");
@@ -126,6 +132,7 @@ public class mainApp {
 		JOptionPane.showMessageDialog(null, "Inserta los valores de las ruedas traseras");
 		Rueda rt = crearRueda('t');
 		
+		//Comprovamos si el titular existe y los assignamos al vehiculo
 		do {
 			String titular = JOptionPane.showInputDialog("Inserta el nombre del titular del vehiculo");
 			
@@ -144,9 +151,11 @@ public class mainApp {
 		
 		}while(correcto != 1);
 		
+		//Preguntamos si queremos crear conductores
 		String res = JOptionPane.showInputDialog("Quiere añadir otro conductor al vehiculo?(S/N)");
 		res = res.toUpperCase();
 		
+		//Si la respuesta es afirmativa entraremos en un bucle de creación de conductores
 		if(res.equals("S")) {
 			
 			correcto = 0;
@@ -180,7 +189,7 @@ public class mainApp {
 			
 		}
 		
-		
+		//Creamos un coche con los datos introducidos y los introduzco en la array
 		Coche c = new Coche(matricula, marca, rt, rd, color, t);
 		
 		Persona[] aP = new Persona[alp.size()];
@@ -195,8 +204,7 @@ public class mainApp {
 	//Metodo para crear camion
 	public static void crearCamion(ArrayList<Camion> aCamion, ArrayList<Titular> aTit, ArrayList<Conductor> aCond) {
 		
-		//Este metodo pide la información necessaria de un coche, después crea un objeto coche y lo assigna 
-		//a la array pasada por parametro (se usa el metodo crearRueda() para crear las ruadas del vehiculo)
+		//Este mètodo realiza lo mismo que el metodo anterior pero con el vehiculo de tipo camion
 		
 		int correcto = 0;
 		Titular t = null;
@@ -282,9 +290,7 @@ public class mainApp {
 	//Metodo para crear moto
 	public static void crearMoto(ArrayList<Moto> aMoto, ArrayList<Titular> aTit, ArrayList<Conductor> aCond) {
 		
-		//Este metodo pide la información necessaria de un coche, después crea un objeto coche y lo assigna 
-		//a la array pasada por parametro (se usa el metodo crearRueda() para crear las ruadas del vehiculo)
-		
+		//Este mètodo realiza lo mismo que el metodo anterior pero con el vehiculo de tipo camion
 		int correcto = 0;
 		Titular t = null;
 		ArrayList<Persona> alp = new ArrayList<>();
@@ -434,7 +440,7 @@ public class mainApp {
 		
 	}
 	
-	//Metodo para crear un titular
+	//Metodo para crear un conductor
 	public static void crearConductor(ArrayList<Conductor> aCond) {
 		
 		//Metodo similar al de titular pero con los atributos necessarios para un conductor
@@ -459,11 +465,13 @@ public class mainApp {
 		
 	}
 	
+	//Mostramos todos los arrays de objetos
 	public static void mostrarArrays(ArrayList<Coche> aCoch, ArrayList<Moto> am, ArrayList<Camion> aCam, ArrayList<Titular> aTit, ArrayList<Conductor> aCond) {
 		
 		System.out.println("Vehiculos:\n");
 		System.out.println("Coches:\n");
 		
+		//Mostramos cada array usando un for con el metodo toString
 		for(int i=0; i<aCoch.size(); i++) {
 			
 			System.out.println(aCoch.get(i).toString()); 

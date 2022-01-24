@@ -7,7 +7,8 @@ public class Coche extends Vehiculo {
 		super(matricula, marca, trasera, delantera, color, titular);
 		// TODO Auto-generated constructor stub
 	}
-
+	
+	//Añadimos el toString para que se pueda mostrar en el main
 	@Override
 	public String toString() {
 		return "Matricula:" + matricula + ", Marca:" + marca + ", Rueda trasera:" + trasera.toString() + ", Rueda delantera:"

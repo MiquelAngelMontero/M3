@@ -36,7 +36,7 @@ public abstract class Persona {
 		
 	}
 	
-	//Getter para poder obtener el carnet en la clase main
+	//Getter para poder obtener el carnet y el nombre en la clase main
 	public Carnet getCarnet() {
 		return carnet;
 	}

@@ -54,7 +54,8 @@ public class Carnet {
 	public char getTipoLicencia() {
 		return tipoLicencia;
 	}
-
+	
+	//Añadimos el toString para que se pueda mostrar en el main
 	@Override
 	public String toString() {
 		return "ID: " + id + ", Licencia: " + tipoLicencia

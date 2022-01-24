@@ -14,7 +14,8 @@ public class Titular extends Persona {
 		this.garajePropio = garajePropio;
 		this.seguro = seguro;
 	}
-
+	
+	//Añadimos el toString para que se pueda mostrar en el main
 	@Override
 	public String toString() {
 		return "Garaje Propio: " + garajePropio + ", Seguro: " + seguro + ", Nombre: " + nombre + ", Apellido: "

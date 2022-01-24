@@ -8,6 +8,7 @@ public class Conductor extends Persona {
 		// TODO Auto-generated constructor stub
 	}
 	
+	//Añadimos el toString para que se pueda mostrar en el main
 	@Override
 	public String toString() {
 		return "Nombre: " + nombre + ", Apellido: "

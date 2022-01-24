@@ -42,7 +42,8 @@ public class Rueda {
 		}
 		
 	}
-
+	
+	//Añadimos el toString para que se pueda mostrar en el main
 	@Override
 	public String toString() {
 		return "Diametro: " + diametro + ", Marca:" + marca;

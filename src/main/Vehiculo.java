@@ -38,7 +38,8 @@ public abstract class Vehiculo implements Matriculable {
 		}
 		
 	}
-
+	
+	//Setter para poder assignar una array en el main
 	public void setPersona(Persona[] persona) {
 		this.persona = persona;
 	}
